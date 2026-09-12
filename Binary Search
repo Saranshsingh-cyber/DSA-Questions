@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+// Function that returns the index of the target if found, otherwise -1
+int binarySearch(int array[], int size, int target) {
+    int low = 0;
+    int high = size - 1;
+
+    while (low <= high) {
+        // Safe midpoint calculation to prevent integer overflow
+        int mid = low + (high - low) / 2;
+
+        // Check if target is present at mid
+        if (array[mid] == target) {
+            return mid;
+        }
+        // If target is greater, ignore the left half
+        else if (array[mid] < target) {
+            low = mid + 1;
+        }
+        // If target is smaller, ignore the right half
+        else {
+            high = mid - 1;
+        }
+    }
+    // Element was not present in the array
+    return -1;
+}
+
+int main() {
+    // Array must be sorted for binary search to work!
+    int data[] = {12, 23, 34, 45, 56, 67, 78, 89, 90};
+    int size = sizeof(data) / sizeof(data[0]);
+    int target = 56;
+
+    int result = binarySearch(data, size, target);
+
+    if (result != -1) {
+        printf("Element %d found at index position: %d\n", target, result);
+    } else {
+        printf("Element %d not found in the array.\n", target);
+    }
+
+    return 0;
+}
