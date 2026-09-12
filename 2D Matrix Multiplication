@@ -1,0 +1,61 @@
+#include <stdio.h>
+
+int main() {
+    int r1, c1, r2, c2;
+
+    // 1. Get dimensions of the first matrix
+    printf("Enter rows and columns for the first matrix: ");
+    scanf("%d %d", &r1, &c1);
+
+    // 2. Get dimensions of the second matrix
+    printf("Enter rows and columns for the second matrix: ");
+    scanf("%d %d", &r2, &c2);
+
+    // Matrix multiplication rule check
+    if (c1 != r2) {
+        printf("\nError: Columns of the first matrix must equal rows of the second matrix!\n");
+        return 1;
+    }
+
+    int a[r1][c1], b[r2][c2], result[r1][c2];
+
+    // 3. Input elements for the first matrix
+    printf("\nEnter elements for Matrix 1:\n");
+    for (int i = 0; i < r1; i++) {
+        for (int j = 0; j < c1; j++) {
+            printf("Enter element [%d][%d]: ", i, j);
+            scanf("%d", &a[i][j]);
+        }
+    }
+
+    // 4. Input elements for the second matrix
+    printf("\nEnter elements for Matrix 2:\n");
+    for (int i = 0; i < r2; i++) {
+        for (int j = 0; j < c2; j++) {
+            printf("Enter element [%d][%d]: ", i, j);
+            scanf("%d", &b[i][j]);
+        }
+    }
+
+    // 5. Initialize result matrix to 0 and perform multiplication
+    // The core multiplication algorithm requires three nested loops
+    for (int i = 0; i < r1; i++) {
+        for (int j = 0; j < c2; j++) {
+            result[i][j] = 0; // Initialize cell
+            for (int k = 0; k < c1; k++) {
+                result[i][j] += a[i][k] * b[k][j];
+            }
+        }
+    }
+
+    // 6. Display the resulting matrix
+    printf("\nResultant Matrix:\n");
+    for (int i = 0; i < r1; i++) {
+        for (int j = 0; j < c2; j++) {
+            printf("%d\t", result[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
