@@ -1,0 +1,137 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_CAPACITY 100
+
+// Function prototypes
+void traverse(int arr[], int size);
+int insertElement(int arr[], int size, int element, int position);
+int deleteElement(int arr[], int size, int position);
+
+int main() {
+    int arr[MAX_CAPACITY];
+    int size = 0, choice, element, position;
+
+    // Initializing the array with user inputs
+    printf("Enter the initial number of elements (Max %d): ", MAX_CAPACITY);
+    scanf("%d", &size);
+
+    if (size > MAX_CAPACITY || size < 0) {
+        printf("Invalid size. Exiting program.\n");
+        return 1;
+    }
+
+    printf("Enter %d elements:\n", size);
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Interactive Menu Loop
+    while (1) {
+        printf("\n--- ARRAY OPERATIONS MENU ---\n");
+        printf("1. Traversal (Display)\n");
+        printf("2. Insertion\n");
+        printf("3. Deletion\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                traverse(arr, size);
+                break;
+
+            case 2:
+                printf("Enter element to insert: ");
+                scanf("%d", &element);
+                printf("Enter position (1 to %d): ", size + 1);
+                scanf("%d", &position);
+                
+                size = insertElement(arr, size, element, position);
+                break;
+
+            case 3:
+                printf("Enter position to delete (1 to %d): ", size);
+                scanf("%d", &position);
+                
+                size = deleteElement(arr, size, position);
+                break;
+
+            case 4:
+                printf("Exiting program. Goodbye!\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice! Please select a valid option.\n");
+        }
+    }
+
+    return 0;
+}
+
+// 1. TRAVERSAL: Access and print each element sequentially
+void traverse(int arr[], int size) {
+    if (size == 0) {
+        printf("Array is empty.\n");
+        return;
+    }
+    printf("Current Array Elements: ");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+// 2. INSERTION: Shift elements right to make space for a new element
+int insertElement(int arr[], int size, int element, int position) {
+    // Check if array has space
+    if (size >= MAX_CAPACITY) {
+        printf("Error: Array Overflow. Cannot insert.\n");
+        return size;
+    }
+    
+    // Check for valid position bounds (1-based indexing for the user)
+    if (position < 1 || position > size + 1) {
+        printf("Error: Invalid position!\n");
+        return size;
+    }
+
+    // Convert 1-based position to 0-based index
+    int index = position - 1;
+
+    // Shift elements to the right to create a gap
+    for (int i = size - 1; i >= index; i--) {
+        arr[i + 1] = arr[i];
+    }
+
+    // Insert the new value and increment logical size
+    arr[index] = element;
+    printf("Element %d successfully inserted at position %d.\n", element, position);
+    return size + 1;
+}
+
+// 3. DELETION: Remove an element and shift remaining elements left
+int deleteElement(int arr[], int size, int position) {
+    // Check if array is empty
+    if (size == 0) {
+        printf("Error: Array Underflow. Nothing to delete.\n");
+        return size;
+    }
+
+    // Check for valid position bounds (1-based indexing)
+    if (position < 1 || position > size) {
+        printf("Error: Invalid position!\n");
+        return size;
+    }
+
+    // Convert 1-based position to 0-based index
+    int index = position - 1;
+
+    // Shift elements to the left to close the gap
+    for (int i = index; i < size - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
+
+    printf("Element at position %d successfully deleted.\n", position);
+    return size - 1; // Decrement logical size
+}
