@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to insert a new node at the beginning of the list
+void insertAtBeginning(struct Node** head_ref, int new_data) {
+    // Allocate memory for the new node
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    
+    if (new_node == NULL) {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+
+    // Put in the data
+    new_node->data = new_data;
+
+    // Link the old list to the next of the new node
+    new_node->next = (*head_ref);
+
+    // Move the head to point to the new node
+    *head_ref = new_node;
+    printf("Node with data %d inserted successfully.\n", new_data);
+}
+
+// Function to delete the first occurrence of a key in the linked list
+void deleteByValue(struct Node** head_ref, int key) {
+    // Store head node
+    struct Node* temp = *head_ref;
+    struct Node* prev = NULL;
+
+    // If the head node itself holds the key to be deleted
+    if (temp != NULL && temp->data == key) {
+        *head_ref = temp->next; // Changed head
+        free(temp);            // free old head
+        printf("Node with data %d deleted successfully.\n", key);
+        return;
+    }
+
+    // Search for the key to be deleted, keep track of the
+    // previous node as we need to change 'prev->next'
+    while (temp != NULL && temp->data != key) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    // If key was not present in linked list
+    if (temp == NULL) {
+        printf("Element %d not found in the list.\n", key);
+        return;
+    }
+
+    // Unlink the node from linked list
+    prev->next = temp->next;
+
+    // Free memory
+    free(temp);
+    printf("Node with data %d deleted successfully.\n", key);
+}
+
+// Function to display the linked list
+void displayList(struct Node* node) {
+    if (node == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+    
+    printf("Linked List: ");
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->next;
+    }
+    printf("NULL\n");
+}
+
+// Driver program to test the functions using a menu-driven interface
+int main() {
+    struct Node* head = NULL; // Initialize empty list
+    int choice, value;
+
+    while (1) {
+        printf("\n--- Singly Linked List Operations ---\n");
+        printf("1. Insert (At Beginning)\n");
+        printf("2. Delete (By Value)\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                insertAtBeginning(&head, value);
+                break;
+            case 2:
+                printf("Enter value to delete: ");
+                scanf("%d", &value);
+                deleteByValue(&head, value);
+                break;
+            case 3:
+                displayList(head);
+                break;
+            case 4:
+                printf("Exiting program...\n");
+                
+                // Clean up memory before exiting
+                struct Node* current = head;
+                struct Node* nextNode;
+                while (current != NULL) {
+                    nextNode = current->next;
+                    free(current);
+                    current = nextNode;
+                }
+                exit(0);
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+    return 0;
+}
