@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// 1. Define the structure of a singly linked list node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// 2. Function to traverse and display the linked list
+void displayList(struct Node* head) {
+    // If the list is empty
+    if (head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    struct Node* current = head; // Start from the head node
+    printf("Linked List: ");
+    
+    // Traverse until the end of the list (NULL)
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next; // Move to the next node
+    }
+    printf("NULL\n");
+}
+
+// Helper function to create a new node
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed!\n");
+        exit(1);
+    }
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Helper function to free the allocated memory
+void freeList(struct Node* head) {
+    struct Node* temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
+int main() {
+    // Initialize nodes
+    struct Node* head = NULL;
+
+    // Create a hardcoded linked list for demonstration: 10 -> 20 -> 30 -> NULL
+    head = createNode(10);
+    head->next = createNode(20);
+    head->next->next = createNode(30);
+
+    // Call traversal and display function
+    displayList(head);
+
+    // Free allocated dynamic memory
+    freeList(head);
+
+    return 0;
+}
